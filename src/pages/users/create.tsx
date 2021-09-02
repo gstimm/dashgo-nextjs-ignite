@@ -1,6 +1,5 @@
-import { RiAddLine, RiPencilLine } from 'react-icons/ri';
+import { RiSaveLine } from 'react-icons/ri';
 import { Header } from '../../components/Header';
-import { Pagination } from '../../components/Pagination';
 import { SideBar } from '../../components/SideBar';
 import {
   Box,
@@ -11,6 +10,7 @@ import {
   SimpleGrid,
   HStack,
   Button,
+  Icon,
 } from '@chakra-ui/react';
 import { Input } from '../../components/Form/Input';
 
@@ -48,7 +48,12 @@ export default function CreateUser() {
           <Flex mt='8' justify='flex-end'>
             <HStack spacing='4'>
               <Button colorScheme='transparent'>Cancelar</Button>
-              <Button colorScheme='pink'>Salvar</Button>
+              <Button
+                colorScheme='pink'
+                leftIcon={<Icon as={RiSaveLine} fontSize='20' />}
+              >
+                Salvar
+              </Button>
             </HStack>
           </Flex>
         </Box>
