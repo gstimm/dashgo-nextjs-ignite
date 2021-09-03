@@ -13,6 +13,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { Input } from '../../components/Form/Input';
+import Link from 'next/link';
 
 export default function CreateUser() {
   return (
@@ -47,7 +48,9 @@ export default function CreateUser() {
 
           <Flex mt='8' justify='flex-end'>
             <HStack spacing='4'>
-              <Button colorScheme='transparent'>Cancelar</Button>
+              <Link href='/users' passHref>
+                <Button colorScheme='transparent'>Cancelar</Button>
+              </Link>
               <Button
                 colorScheme='pink'
                 leftIcon={<Icon as={RiSaveLine} fontSize='20' />}
