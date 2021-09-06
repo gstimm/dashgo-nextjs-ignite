@@ -1,21 +1,27 @@
-import { RiSaveLine } from 'react-icons/ri';
-import { Header } from '../../components/Header';
-import { SideBar } from '../../components/SideBar';
+import * as yup from 'yup';
+
 import {
   Box,
-  Flex,
-  Heading,
-  Divider,
-  VStack,
-  SimpleGrid,
-  HStack,
   Button,
+  Divider,
+  Flex,
+  HStack,
+  Heading,
   Icon,
+  SimpleGrid,
+  VStack,
 } from '@chakra-ui/react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { Header } from '../../components/Header';
 import { Input } from '../../components/Form/Input';
 import Link from 'next/link';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import * as yup from 'yup';
+import { RiSaveLine } from 'react-icons/ri';
+import { SideBar } from '../../components/SideBar';
+import { api } from '../../services/api';
+import { queryClient } from '../../services/queryClient';
+import { useMutation } from 'react-query';
+import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 type CreateUserFormData = {
@@ -38,6 +44,26 @@ const CreateUserFormSchema = yup.object().shape({
 });
 
 export default function CreateUser() {
+  const router = useRouter();
+
+  const createUser = useMutation(
+    async (user: CreateUserFormData) => {
+      const response = await api.post('/users', {
+        user: {
+          ...user,
+          created_at: new Date(),
+        },
+      });
+
+      return response.data.user;
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('users');
+      },
+    },
+  );
+
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(CreateUserFormSchema),
   });
@@ -45,9 +71,9 @@ export default function CreateUser() {
   const { errors } = formState;
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async data => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await createUser.mutateAsync(data);
 
-    console.log(data);
+    router.push('/users');
   };
 
   return (
